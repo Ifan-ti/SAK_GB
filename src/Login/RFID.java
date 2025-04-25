@@ -114,9 +114,11 @@ public void Login (){
         scan = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(238, 238, 238));
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        roundednew1.setBackground(new java.awt.Color(238, 238, 238));
         roundednew1.setColorend(new java.awt.Color(146, 199, 207));
         roundednew1.setColorstar(new java.awt.Color(93, 224, 244));
         roundednew1.setRoundedkananatas(889);

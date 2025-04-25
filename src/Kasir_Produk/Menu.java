@@ -5,6 +5,12 @@
 package Kasir_Produk;
 
 import Aset.roundednew;
+import Koneksi.Koneksi;
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
+import java.awt.Color;
+import raven.glasspanepopup.GlassPanePopup;
+import java.sql.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,8 +23,38 @@ public class Menu extends roundednew {
      */
     public Menu() {
         initComponents();
+        setOpaque(false);
+        loaddata();
+        
     }
+    
+    private void loaddata(){
+        try {
+            
+            Connection conn = (Connection) Koneksi.koneksi();
+            
+            String sql = "SELECT produk FROM Nama_produk"; // Ganti dengan query Anda
+            PreparedStatement st = conn.prepareStatement(sql);
 
+            // 3. Menjalankan query dan mendapatkan hasilnya
+            ResultSet rs = st.executeQuery();
+
+            // 4. Mengiterasi hasil query dan menambahkannya ke JComboBox
+            while (rs.next()) {
+                String namaKolom = rs.getString("Nama_produk"); // Ganti nama_kolom
+                jc_produk.addItem(namaKolom);
+            }
+            System.out.println("Data berhasil ditambahkan ke JComboBox.");
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Gagal mengambil data dari database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,13 +70,18 @@ public class Menu extends roundednew {
         jLabel3 = new javax.swing.JLabel();
         button1 = new Aset.button();
         jLabel2 = new javax.swing.JLabel();
-        txt_name2 = new Aset.RoundedTextField();
         txt_harga1 = new Aset.RoundedTextField();
         jLabel8 = new javax.swing.JLabel();
+        jc_produk = new Aset.Jcomboboxcustom();
         roundednew4 = new Aset.roundednew();
         button2 = new Aset.button();
-        Hapus = new Aset.button();
-        Update = new Aset.button();
+        Update1 = new Aset.button();
+        Update4 = new Aset.button();
+        Update5 = new Aset.button();
+        Update6 = new Aset.button();
+        Update7 = new Aset.button();
+        Update2 = new Aset.button();
+        Update8 = new Aset.button();
         roundednew5 = new Aset.roundednew();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -52,8 +93,16 @@ public class Menu extends roundednew {
         txt_name4 = new Aset.RoundedTextField();
         txt_name5 = new Aset.RoundedTextField();
         txt_name6 = new Aset.RoundedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(242, 242, 242));
+        setColorend(new java.awt.Color(242, 242, 242));
+        setColorstar(new java.awt.Color(242, 242, 242));
+        setRoundedkananatas(94);
+        setRoundedkananbawah(94);
+        setRoundedkiriatas(94);
+        setRoundedkiribawah(94);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         roundednew3.setColorend(new java.awt.Color(170, 215, 217));
@@ -69,8 +118,9 @@ public class Menu extends roundednew {
         judul.setText("Tambah Produk");
         roundednew3.add(judul, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, 31));
 
-        txt_harga.setBackground(new java.awt.Color(242, 242, 242));
+        txt_harga.setBackground(new java.awt.Color(251, 249, 241));
         txt_harga.setBorder(null);
+        txt_harga.setForeground(new java.awt.Color(153, 153, 153));
         txt_harga.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_harga.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_harga.setRoundedkananatas(15);
@@ -85,7 +135,12 @@ public class Menu extends roundednew {
         roundednew3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, 31));
 
         button1.setBackground(new java.awt.Color(229, 225, 218));
+        button1.setForeground(new java.awt.Color(90, 142, 149));
         button1.setText("KONFIMASI");
+        button1.setColor(new java.awt.Color(229, 225, 218));
+        button1.setColorborder(new java.awt.Color(229, 225, 218));
+        button1.setColorclic(new java.awt.Color(229, 225, 218));
+        button1.setColorover(new java.awt.Color(229, 225, 218));
         button1.setFont(new java.awt.Font("Poppins", 1, 25)); // NOI18N
         button1.setRadius(15);
         button1.addActionListener(new java.awt.event.ActionListener() {
@@ -97,22 +152,13 @@ public class Menu extends roundednew {
 
         jLabel2.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(90, 142, 149));
-        jLabel2.setText("Tambah Produk");
+        jLabel2.setText("Nama Produk");
         roundednew3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 31));
 
-        txt_name2.setBackground(new java.awt.Color(242, 242, 242));
-        txt_name2.setBorder(null);
-        txt_name2.setCaretColor(new java.awt.Color(255, 255, 255));
-        txt_name2.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
-        txt_name2.setRoundedkananatas(15);
-        txt_name2.setRoundedkananbawah(15);
-        txt_name2.setRoundedkiriatas(15);
-        txt_name2.setRoundedkiribawah(15);
-        roundednew3.add(txt_name2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 490, 50));
-
-        txt_harga1.setBackground(new java.awt.Color(242, 242, 242));
+        txt_harga1.setBackground(new java.awt.Color(251, 249, 241));
         txt_harga1.setBorder(null);
-        txt_harga1.setCaretColor(new java.awt.Color(255, 255, 255));
+        txt_harga1.setForeground(new java.awt.Color(153, 153, 153));
+        txt_harga1.setCaretColor(new java.awt.Color(242, 242, 242));
         txt_harga1.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_harga1.setRoundedkananatas(15);
         txt_harga1.setRoundedkananbawah(15);
@@ -125,6 +171,11 @@ public class Menu extends roundednew {
         jLabel8.setText("Harga Produk");
         roundednew3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, -1, 31));
 
+        jc_produk.setBackground(new java.awt.Color(251, 249, 241));
+        jc_produk.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", " " }));
+        jc_produk.setToolTipText("");
+        roundednew3.add(jc_produk, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 490, 50));
+
         add(roundednew3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 550, 380));
 
         roundednew4.setColorend(new java.awt.Color(170, 215, 217));
@@ -135,31 +186,125 @@ public class Menu extends roundednew {
         roundednew4.setRoundedkiribawah(50);
         roundednew4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        button2.setText("button2");
+        button2.setForeground(new java.awt.Color(90, 142, 149));
+        button2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Data_diri.png"))); // NOI18N
+        button2.setText("Data Diri");
+        button2.setColor(new java.awt.Color(170, 215, 217));
+        button2.setColorborder(new java.awt.Color(170, 215, 217));
+        button2.setColorclic(new java.awt.Color(170, 215, 217));
+        button2.setColorover(new java.awt.Color(170, 215, 217));
+        button2.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        button2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        button2.setIconTextGap(10);
         button2.setRadius(30);
+        button2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                button2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button2MouseExited(evt);
+            }
+        });
         button2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button2ActionPerformed(evt);
             }
         });
-        roundednew4.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+        roundednew4.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 200, 80));
 
-        Hapus.setRadius(30);
-        Hapus.addActionListener(new java.awt.event.ActionListener() {
+        Update1.setColor(new java.awt.Color(251, 249, 241));
+        Update1.setColorborder(new java.awt.Color(170, 215, 217));
+        Update1.setColorclic(new java.awt.Color(251, 249, 241));
+        Update1.setColorover(new java.awt.Color(251, 249, 241));
+        Update1.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update1.setRadius(30);
+        Update1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HapusActionPerformed(evt);
+                Update1ActionPerformed(evt);
             }
         });
-        roundednew4.add(Hapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+        roundednew4.add(Update1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 200, 80));
 
-        Update.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
-        Update.setRadius(30);
-        Update.addActionListener(new java.awt.event.ActionListener() {
+        Update4.setColor(new java.awt.Color(251, 249, 241));
+        Update4.setColorborder(new java.awt.Color(170, 215, 217));
+        Update4.setColorclic(new java.awt.Color(251, 249, 241));
+        Update4.setColorover(new java.awt.Color(251, 249, 241));
+        Update4.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update4.setRadius(30);
+        Update4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateActionPerformed(evt);
+                Update4ActionPerformed(evt);
             }
         });
-        roundednew4.add(Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+        roundednew4.add(Update4, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 40, 200, 80));
+
+        Update5.setColor(new java.awt.Color(251, 249, 241));
+        Update5.setColorborder(new java.awt.Color(251, 249, 241));
+        Update5.setColorclic(new java.awt.Color(251, 249, 241));
+        Update5.setColorover(new java.awt.Color(251, 249, 241));
+        Update5.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update5.setRadius(30);
+        Update5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update5ActionPerformed(evt);
+            }
+        });
+        roundednew4.add(Update5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 240, 120));
+
+        Update6.setColor(new java.awt.Color(251, 249, 241));
+        Update6.setColorborder(new java.awt.Color(170, 215, 217));
+        Update6.setColorclic(new java.awt.Color(251, 249, 241));
+        Update6.setColorover(new java.awt.Color(251, 249, 241));
+        Update6.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update6.setRadius(30);
+        Update6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update6ActionPerformed(evt);
+            }
+        });
+        roundednew4.add(Update6, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 180, 200, 80));
+
+        Update7.setColor(new java.awt.Color(251, 249, 241));
+        Update7.setColorborder(new java.awt.Color(251, 249, 241));
+        Update7.setColorclic(new java.awt.Color(251, 249, 241));
+        Update7.setColorover(new java.awt.Color(251, 249, 241));
+        Update7.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update7.setRadius(30);
+        Update7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update7ActionPerformed(evt);
+            }
+        });
+        roundednew4.add(Update7, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 20, 240, 120));
+
+        Update2.setColor(new java.awt.Color(251, 249, 241));
+        Update2.setColorborder(new java.awt.Color(251, 249, 241));
+        Update2.setColorclic(new java.awt.Color(251, 249, 241));
+        Update2.setColorover(new java.awt.Color(251, 249, 241));
+        Update2.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update2.setRadius(30);
+        Update2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update2ActionPerformed(evt);
+            }
+        });
+        roundednew4.add(Update2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 240, 120));
+
+        Update8.setColor(new java.awt.Color(251, 249, 241));
+        Update8.setColorborder(new java.awt.Color(251, 249, 241));
+        Update8.setColorclic(new java.awt.Color(251, 249, 241));
+        Update8.setColorover(new java.awt.Color(251, 249, 241));
+        Update8.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update8.setRadius(30);
+        Update8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update8ActionPerformed(evt);
+            }
+        });
+        roundednew4.add(Update8, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 160, 240, 120));
 
         add(roundednew4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
 
@@ -196,8 +341,9 @@ public class Menu extends roundednew {
         jLabel7.setText("Tambah Produk");
         roundednew5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 640, -1, 31));
 
-        txt_name1.setBackground(new java.awt.Color(242, 242, 242));
+        txt_name1.setBackground(new java.awt.Color(251, 249, 241));
         txt_name1.setBorder(null);
+        txt_name1.setForeground(new java.awt.Color(153, 153, 153));
         txt_name1.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_name1.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_name1.setInheritsPopupMenu(true);
@@ -207,8 +353,9 @@ public class Menu extends roundednew {
         txt_name1.setRoundedkiribawah(15);
         roundednew5.add(txt_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 395, 200, 40));
 
-        txt_name3.setBackground(new java.awt.Color(242, 242, 242));
+        txt_name3.setBackground(new java.awt.Color(251, 249, 241));
         txt_name3.setBorder(null);
+        txt_name3.setForeground(new java.awt.Color(153, 153, 153));
         txt_name3.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_name3.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_name3.setInheritsPopupMenu(true);
@@ -218,8 +365,9 @@ public class Menu extends roundednew {
         txt_name3.setRoundedkiribawah(15);
         roundednew5.add(txt_name3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 455, 200, 40));
 
-        txt_name4.setBackground(new java.awt.Color(242, 242, 242));
+        txt_name4.setBackground(new java.awt.Color(251, 249, 241));
         txt_name4.setBorder(null);
+        txt_name4.setForeground(new java.awt.Color(153, 153, 153));
         txt_name4.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_name4.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_name4.setInheritsPopupMenu(true);
@@ -229,8 +377,9 @@ public class Menu extends roundednew {
         txt_name4.setRoundedkiribawah(15);
         roundednew5.add(txt_name4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 575, 200, 40));
 
-        txt_name5.setBackground(new java.awt.Color(242, 242, 242));
+        txt_name5.setBackground(new java.awt.Color(251, 249, 241));
         txt_name5.setBorder(null);
+        txt_name5.setForeground(new java.awt.Color(153, 153, 153));
         txt_name5.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_name5.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_name5.setInheritsPopupMenu(true);
@@ -240,8 +389,9 @@ public class Menu extends roundednew {
         txt_name5.setRoundedkiribawah(15);
         roundednew5.add(txt_name5, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 515, 200, 40));
 
-        txt_name6.setBackground(new java.awt.Color(242, 242, 242));
+        txt_name6.setBackground(new java.awt.Color(251, 249, 241));
         txt_name6.setBorder(null);
+        txt_name6.setForeground(new java.awt.Color(153, 153, 153));
         txt_name6.setCaretColor(new java.awt.Color(255, 255, 255));
         txt_name6.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         txt_name6.setInheritsPopupMenu(true);
@@ -251,6 +401,14 @@ public class Menu extends roundednew {
         txt_name6.setRoundedkiribawah(15);
         roundednew5.add(txt_name6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 635, 200, 40));
 
+        jTextArea1.setBackground(new java.awt.Color(251, 249, 241));
+        jTextArea1.setColumns(20);
+        jTextArea1.setForeground(new java.awt.Color(153, 153, 153));
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        roundednew5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 500, 335));
+
         add(roundednew5, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 560, 700));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -259,21 +417,64 @@ public class Menu extends roundednew {
     }//GEN-LAST:event_button1ActionPerformed
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
-        // TODO add your handling code here:
+       GlassPanePopup.showPopup(new datadiri());
+       
+       
     }//GEN-LAST:event_button2ActionPerformed
 
-    private void HapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusActionPerformed
-   
-    }//GEN-LAST:event_HapusActionPerformed
+    private void Update1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update1ActionPerformed
 
-    private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateActionPerformed
-       
-    }//GEN-LAST:event_UpdateActionPerformed
+    private void Update4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update4ActionPerformed
+
+    private void Update5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update5ActionPerformed
+
+    private void Update6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update6ActionPerformed
+
+    private void button2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2MouseEntered
+        Color p = new Color(229,225,218);
+        button2.setColorborder(p);
+    }//GEN-LAST:event_button2MouseEntered
+
+    private void button2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2MouseClicked
+       Color p = new Color(229,225,218);
+        button2.setColorborder(p);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button2MouseClicked
+
+    private void button2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2MouseExited
+        Color p = new Color(170,215,217);
+        button2.setColorborder(p);
+    }//GEN-LAST:event_button2MouseExited
+
+    private void Update7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update7ActionPerformed
+
+    private void Update2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update2ActionPerformed
+
+    private void Update8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update8ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Aset.button Hapus;
-    private Aset.button Update;
+    private Aset.button Update1;
+    private Aset.button Update2;
+    private Aset.button Update4;
+    private Aset.button Update5;
+    private Aset.button Update6;
+    private Aset.button Update7;
+    private Aset.button Update8;
     private Aset.button button1;
     private Aset.button button2;
     private javax.swing.JLabel jLabel1;
@@ -284,6 +485,9 @@ public class Menu extends roundednew {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private Aset.Jcomboboxcustom jc_produk;
     private javax.swing.JLabel judul;
     private Aset.roundednew roundednew3;
     private Aset.roundednew roundednew4;
@@ -291,7 +495,6 @@ public class Menu extends roundednew {
     private Aset.RoundedTextField txt_harga;
     private Aset.RoundedTextField txt_harga1;
     private Aset.RoundedTextField txt_name1;
-    private Aset.RoundedTextField txt_name2;
     private Aset.RoundedTextField txt_name3;
     private Aset.RoundedTextField txt_name4;
     private Aset.RoundedTextField txt_name5;

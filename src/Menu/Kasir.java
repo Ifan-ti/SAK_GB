@@ -6,9 +6,13 @@ package Menu;
 
 import Login.Login;
 import Kasir_Produk.Menu;
+import Koneksi.Koneksi;
+
 import java.awt.BorderLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import raven.glasspanepopup.GlassPanePopup;
+import java.sql.*;
 
 /**
  *
@@ -28,6 +32,24 @@ public class Kasir extends javax.swing.JFrame {
     }
     
     
+            Connection conn = (Connection) Koneksi.koneksi();
+    private void loadpresensi(){
+        String sql = "SELECT * FROM presensi where = ?";
+        
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, sql);
+            ResultSet rs = st.executeQuery();
+            
+            if(rs.next()){
+                txt_nama.setText(rs.getString(""));
+            }
+            
+            
+        } catch (Exception e) {
+        }
+    }
+    
     
     public void bottunrounded (int atas, int bawah){
         roundedatas.setLocation(226, atas);
@@ -42,6 +64,7 @@ public class Kasir extends javax.swing.JFrame {
     
     public Kasir() {
         initComponents();
+        GlassPanePopup.install(this);
     }
 
     /**
@@ -66,8 +89,9 @@ public class Kasir extends javax.swing.JFrame {
         roundedatas = new Aset.roundednew();
         dalamatas = new Aset.roundednew();
         roundednew2 = new Aset.roundednew();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        txt_pulang = new javax.swing.JLabel();
+        txt_nama = new javax.swing.JLabel();
+        txt_masuk = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -265,15 +289,20 @@ public class Kasir extends javax.swing.JFrame {
         roundednew2.setRoundedkiribawah(40);
         roundednew2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(90, 142, 149));
-        jLabel2.setText("SAK - GB");
-        roundednew2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 120, -1));
+        txt_pulang.setFont(new java.awt.Font("Poppins", 1, 15)); // NOI18N
+        txt_pulang.setForeground(new java.awt.Color(90, 142, 149));
+        txt_pulang.setText("Jam Pulang");
+        roundednew2.add(txt_pulang, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 200, -1));
 
-        jLabel4.setFont(new java.awt.Font("Poppins", 1, 25)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(90, 142, 149));
-        jLabel4.setText("SAK - GB");
-        roundednew2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, -1));
+        txt_nama.setFont(new java.awt.Font("Poppins", 1, 25)); // NOI18N
+        txt_nama.setForeground(new java.awt.Color(90, 142, 149));
+        txt_nama.setText("Nama");
+        roundednew2.add(txt_nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, -1));
+
+        txt_masuk.setFont(new java.awt.Font("Poppins", 1, 15)); // NOI18N
+        txt_masuk.setForeground(new java.awt.Color(90, 142, 149));
+        txt_masuk.setText("Jam Masuk");
+        roundednew2.add(txt_masuk, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 200, -1));
 
         roundednew1.add(roundednew2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 700, 220, 120));
 
@@ -394,12 +423,13 @@ public class Kasir extends javax.swing.JFrame {
     private Aset.roundednew dalamatas;
     private Aset.roundednew dalambawah;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private Aset.roundednew roundedatas;
     private Aset.roundednew roundedbawah;
     private Aset.roundednew roundednew1;
     private Aset.roundednew roundednew2;
+    private javax.swing.JLabel txt_masuk;
+    private javax.swing.JLabel txt_nama;
+    private javax.swing.JLabel txt_pulang;
     // End of variables declaration//GEN-END:variables
 }

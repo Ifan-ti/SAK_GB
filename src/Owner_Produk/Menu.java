@@ -231,7 +231,7 @@ public class Menu extends roundednew {
 
         jLabel1.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(90, 142, 149));
-        jLabel1.setText("Tambah Produk");
+        jLabel1.setText("Nama Produk");
         roundednew3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 31));
 
         judul.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N

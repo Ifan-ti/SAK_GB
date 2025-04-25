@@ -115,6 +115,8 @@ public class Verifikasi extends javax.swing.JFrame {
         button3 = new Aset.button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         roundednew2.setColorend(new java.awt.Color(146, 199, 207));
@@ -317,7 +319,7 @@ public class Verifikasi extends javax.swing.JFrame {
 
         getContentPane().add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 200, 449, 470));
 
-        setBounds(0, 0, 1566, 896);
+        setBounds(0, 0, 1552, 889);
     }// </editor-fold>//GEN-END:initComponents
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed

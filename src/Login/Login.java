@@ -23,7 +23,7 @@ public class Login extends javax.swing.JFrame {
     public void Presensi(String Absen, String Id, String fm, String FWaktu, int jam){
         try{
             
-                String Presensi = "INSERT INTO `presensi` (`Id_Presensi`,`Id_User`,  `Tanggal`, `Keterangan`, `Waktu`) VALUES (NULL, ?, ?, ?, ?)";
+                String Presensi = "INSERT INTO `presensi` (`Id_Presensi`,`Id_User`,  `Tanggal`, `Keterangan`, `Waktu_Masuk`) VALUES (NULL, ?, ?, ?, ?)";
                 java.sql.PreparedStatement pst = conn.prepareStatement(Presensi);
                 pst.setString(1,Id);
                 pst.setString(2,fm);
@@ -344,7 +344,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_EcloseMouseClicked
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
-        // TODO add your handling code here:
+        Login();
     }//GEN-LAST:event_button3ActionPerformed
 
     /**
