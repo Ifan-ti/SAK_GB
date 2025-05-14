@@ -6,6 +6,7 @@ package Menu;
 
 import Login.Login;
 import Kasir_Produk.Menu;
+import Kasir_status.Menu_status;
 import Koneksi.Koneksi;
 
 import java.awt.BorderLayout;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import raven.glasspanepopup.GlassPanePopup;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +26,27 @@ public class Kasir extends javax.swing.JFrame {
     /**
      * Creates new form Kasir
      */
+    
+    private void vievJam(){
+        String sql = "SELECT Waktu_Masuk, Waktu_pulang FROM presensi WHERE  Nama = ? AND Tanggal = ? ";
+        
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            
+            st.setString(1, Username);
+            st.setString(2, tanggal);
+            
+            ResultSet rs = st.executeQuery();
+            
+            if(rs.next()){
+                txt_masuk.setText("Jam Masuk : "+rs.getString("Waktu_Masuk"));
+                txt_pulang.setText(rs.getString("Waktu_pulang"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Kasir.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     public void Jam(){
     DateTimeFormatter ff = DateTimeFormatter.ofPattern("HH:mm:ss ");
@@ -62,11 +86,18 @@ public class Kasir extends javax.swing.JFrame {
     }
     
     
-    public Kasir() {
+    public Kasir(String Name) {
         initComponents();
         GlassPanePopup.install(this);
+        Username = "ifan";
+        txt_nama.setText(Username);
+        vievJam();
     }
-
+    private String Username = "";
+    // deklarasi bulan, hari, dan tahun
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter format_tanggal = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String tanggal = now.format(format_tanggal);
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -337,7 +368,7 @@ public class Kasir extends javax.swing.JFrame {
     private void MProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MProdukActionPerformed
         Frame1.setLayout(new BorderLayout());
         Frame1.removeAll();
-        Frame1.add(new Menu());
+        Frame1.add(new Menu(Username));
         Frame1.revalidate();
         Frame1.repaint();
 
@@ -363,13 +394,13 @@ public class Kasir extends javax.swing.JFrame {
     }//GEN-LAST:event_MRegisActionPerformed
 
     private void MLaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MLaporanActionPerformed
-        //        MLaporan.setSize(270, 60);
-        //        MProduk.setSize(224, 60);
-        //        MStok.setSize(224, 60);
-        //        MRegis.setSize(224, 60);
-        //        MLogout.setSize(224, 60);
+        Frame1.setLayout(new BorderLayout());
+        Frame1.removeAll();
+        Frame1.add(new Menu_status());
+        Frame1.revalidate();
+        Frame1.repaint();
 
-        bottunrounded(438, 520);
+//        bottunrounded(438, 520);
     }//GEN-LAST:event_MLaporanActionPerformed
 
     private void MLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MLogoutActionPerformed
@@ -408,7 +439,7 @@ public class Kasir extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Kasir().setVisible(true);
+                new Kasir("").setVisible(true);
             }
         });
     }
@@ -432,4 +463,11 @@ public class Kasir extends javax.swing.JFrame {
     private javax.swing.JLabel txt_nama;
     private javax.swing.JLabel txt_pulang;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the Username
+     */
+    public String getUsername() {
+        return Username;
+    }
 }
