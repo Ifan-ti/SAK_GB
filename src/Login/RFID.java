@@ -83,7 +83,7 @@ public void Login (){
 
                         Presensi("Telambat", Id, fm, FWaktu, IJam);
                     }
-                Kasir ow = new Kasir();
+                Kasir ow = new Kasir("");
                 ow.setVisible(true);
                 this.dispose();
             }

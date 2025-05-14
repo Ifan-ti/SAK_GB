@@ -4,12 +4,13 @@
  */
 package Login;
 
+import Kasir_Produk.DataManager;
 import Koneksi.Koneksi;
 import Menu.Kasir;
 import Menu.Owner;
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.sql.Connection;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
@@ -19,16 +20,18 @@ import javax.swing.JOptionPane;
  * @author achmad ifan
  */
 public class Login extends javax.swing.JFrame {
-    java.sql.Connection conn = (Connection) Koneksi.koneksi();
+    Connection conn = (Connection) Koneksi.koneksi();
+    String id_user = "";
     public void Presensi(String Absen, String Id, String fm, String FWaktu, int jam){
         try{
             
-                String Presensi = "INSERT INTO `presensi` (`Id_Presensi`,`Id_User`,  `Tanggal`, `Keterangan`, `Waktu_Masuk`) VALUES (NULL, ?, ?, ?, ?)";
+                String Presensi = "INSERT INTO `presensi` (`Id_Presensi`,`Id_User`,  `Tanggal`, `Keterangan`, `Waktu_Masuk`, Nama) VALUES (NULL, ?, ?, ?, ?,?)";
                 java.sql.PreparedStatement pst = conn.prepareStatement(Presensi);
                 pst.setString(1,Id);
                 pst.setString(2,fm);
                 pst.setString(3,Absen);
                 pst.setString(4,FWaktu);
+                pst.setString(5,txt_user.getText());
                 
                if (Absen.equals("Hadir")){
                 JOptionPane.showMessageDialog(null, "Anda hadir tepat "+Absen);
@@ -42,66 +45,76 @@ public class Login extends javax.swing.JFrame {
     }
     
     
-    
      public void Login (){
-        DateTimeFormatter Waktu = DateTimeFormatter.ofPattern("HH:mm:ss ");
-        DateTimeFormatter Jam = DateTimeFormatter.ofPattern("HH");
-        String FWaktu = LocalDateTime.now().format(Waktu);
-        String FJam = LocalDateTime.now().format(Jam);
-        int IJam = Integer.parseInt(FJam);
-        // deklarasi bulan, hari, dan tahun
-        DateTimeFormatter Tanggal = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
+        DateTimeFormatter waktuFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter jamFormatter = DateTimeFormatter.ofPattern("HH");
+        DateTimeFormatter tanggalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // mengubah format ke string
-        LocalDateTime now = LocalDateTime.now();
-        String fm = now.format(Tanggal); // Mengubah LocalDateTime menjadi string dengan format yyyy-MM-dd
-      
-        
-    
-    try {
-    String sql = "SELECT * FROM user WHERE Username = ? AND Password = ?";
-    
-    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-    
-    // Set parameter untuk prepared statement
-    pst.setString(1, txt_user.getText());
-    pst.setString(2, txt_pw.getText());
-    
-    java.sql.ResultSet rs = pst.executeQuery();
-    if (rs.next()) {
-        // ambil id user
-        String Id = rs.getString("Id_USer");
-        
-            JOptionPane.showMessageDialog(null, "berhasil login");
-            
-                int choice = JOptionPane.showOptionDialog( null, "Apakah Anda Ingin Melakukan Presensi","Presensi",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE, null, null,null);
-        if (rs.getString("role").equals("owner")) {
-                Owner ow = new Owner();
-                ow.setVisible(true);
-                this.dispose();
-        } else if (rs.getString("role").equals("kasir")) {
-            
-            if(IJam< 7 && choice == JOptionPane.YES_OPTION){
-               
-                Presensi("Hadir", Id, fm, FWaktu, IJam);
+        String fWaktu = LocalDateTime.now().format(waktuFormatter);
+        String fJam = LocalDateTime.now().format(jamFormatter);
+        String fm = LocalDateTime.now().format(tanggalFormatter);
+        int iJam = Integer.parseInt(fJam);
+
+        try {
+            String sql = "SELECT Id_USer, role FROM user WHERE Username = ? AND Password = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, txt_user.getText());
+            pst.setString(2, new String(txt_pw.getPassword())); // Gunakan getPassword() untuk JPasswordField
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String idUser = rs.getString("Id_USer");
+                String role = rs.getString("role");
+                JOptionPane.showMessageDialog(null, "Berhasil login sebagai " + role);
+
+                if (role.equals("owner")) {
+                    Owner ow = new Owner();
+                    ow.setVisible(true);
+                    // this.dispose(); // Pastikan 'this' mengacu pada JFrame login
+                } else if (role.equals("kasir")) {
+                    
+
+                        String presensiSql = "SELECT * FROM presensi WHERE Nama = ? AND Tanggal = ?";
+                        PreparedStatement st = conn.prepareStatement(presensiSql);
+                        st.setString(1, txt_user.getText());
+                        st.setString(2, fm);
+                        ResultSet presensiRs = st.executeQuery();
+
+                    if (!presensiRs.next()) { // Jika belum ada presensi hari ini
+                        int choice = JOptionPane.showOptionDialog(null, "Apakah Anda Ingin Melakukan Presensi?", "Presensi",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                        if (choice == JOptionPane.YES_OPTION) {
+                            if (iJam < 7) {
+                                Presensi("Hadir", idUser, fm, fWaktu, iJam);
+                            } else if (iJam < 15) {
+                                Presensi("Telambat", idUser, fm, fWaktu, iJam);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Presensi di luar jam yang ditentukan.");
+                            }
+                        } 
+                        
+                    }else{
+                            JOptionPane.showMessageDialog(null, "Anda sudah melakukan presensi hari ini.");
+                        }
+
+                    Kasir kasirForm = new Kasir(txt_user.getText());
+                    id_user =idUser;
+                    kasirForm.setVisible(true);
+                    this.dispose(); // Pastikan 'this' mengacu pada JFrame login
+                }
+                rs.close();
+                pst.close();
                 
-            }else if(IJam< 15 && choice == JOptionPane.YES_OPTION){
-                
-                Presensi("Telambat", Id, fm, FWaktu, IJam);
+            } else {
+                JOptionPane.showMessageDialog(null, "Username atau password salah");
             }
-                 Kasir ow = new Kasir();
-                ow.setVisible(true);
-                this.dispose();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error login: " + e.getMessage());
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "username atau password salah");
     }
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, e.getMessage());
-}
-    }
-    /**
+    
+   
+     /**
      * Creates new form desktop
      */
     public Login() {
@@ -344,7 +357,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_EcloseMouseClicked
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
+        
         Login();
+       
     }//GEN-LAST:event_button3ActionPerformed
 
     /**
