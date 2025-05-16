@@ -10,6 +10,7 @@ import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import java.awt.Color;
 import raven.glasspanepopup.GlassPanePopup;
 import java.sql.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
  * @author achmad ifan
  */
 public class Menu extends roundednew {
+    
 
     /**
      * Creates new form Menu
@@ -25,15 +27,14 @@ public class Menu extends roundednew {
         initComponents();
         setOpaque(false);
         loaddata();
-        
     }
     
-    private void loaddata(){
+    public void loaddata(){
         try {
             
             Connection conn = (Connection) Koneksi.koneksi();
             
-            String sql = "SELECT produk FROM Nama_produk"; // Ganti dengan query Anda
+            String sql = "SELECT Nama_Produk FROM produk"; // Ganti dengan query Anda
             PreparedStatement st = conn.prepareStatement(sql);
 
             // 3. Menjalankan query dan mendapatkan hasilnya
@@ -96,9 +97,9 @@ public class Menu extends roundednew {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
-        setBackground(new java.awt.Color(242, 242, 242));
         setColorend(new java.awt.Color(242, 242, 242));
         setColorstar(new java.awt.Color(242, 242, 242));
+        setPreferredSize(new java.awt.Dimension(800, 600));
         setRoundedkananatas(94);
         setRoundedkananbawah(94);
         setRoundedkiriatas(94);
@@ -174,6 +175,11 @@ public class Menu extends roundednew {
         jc_produk.setBackground(new java.awt.Color(251, 249, 241));
         jc_produk.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", " " }));
         jc_produk.setToolTipText("");
+        jc_produk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jc_produkActionPerformed(evt);
+            }
+        });
         roundednew3.add(jc_produk, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 490, 50));
 
         add(roundednew3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 550, 380));
@@ -465,6 +471,10 @@ public class Menu extends roundednew {
     private void Update8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Update8ActionPerformed
+
+    private void jc_produkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jc_produkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jc_produkActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

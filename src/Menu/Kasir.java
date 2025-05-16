@@ -6,6 +6,8 @@ package Menu;
 
 import Login.Login;
 import Kasir_Produk.Menu;
+import Kasir_Produk.Checkout;
+import Kasir_Produk.Transaksi;
 import Koneksi.Koneksi;
 
 import java.awt.BorderLayout;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import raven.glasspanepopup.GlassPanePopup;
 import java.sql.*;
+import java.util.Locale;
+import javax.swing.UIManager;
 
 /**
  *
@@ -64,7 +68,7 @@ public class Kasir extends javax.swing.JFrame {
     
     public Kasir() {
         initComponents();
-        GlassPanePopup.install(this);
+        GlassPanePopup.install(this);   
     }
 
     /**
@@ -78,7 +82,7 @@ public class Kasir extends javax.swing.JFrame {
 
         roundednew1 = new Aset.roundednew();
         jLabel1 = new javax.swing.JLabel();
-        Frame1 = new Aset.roundednew();
+        Frame2 = new Aset.roundednew();
         MStok = new Aset.button();
         MProduk = new Aset.button();
         MRegis = new Aset.button();
@@ -96,6 +100,7 @@ public class Kasir extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(800, 820));
 
         roundednew1.setColorend(new java.awt.Color(146, 199, 207));
         roundednew1.setColorstar(new java.awt.Color(134, 211, 222));
@@ -104,25 +109,25 @@ public class Kasir extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Group 101 (3).png"))); // NOI18N
         roundednew1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 34, -1, -1));
 
-        Frame1.setColorend(new java.awt.Color(238, 238, 238));
-        Frame1.setColorstar(new java.awt.Color(238, 238, 238));
-        Frame1.setRoundedkananatas(94);
-        Frame1.setRoundedkananbawah(94);
-        Frame1.setRoundedkiriatas(94);
-        Frame1.setRoundedkiribawah(94);
+        Frame2.setColorend(new java.awt.Color(238, 238, 238));
+        Frame2.setColorstar(new java.awt.Color(238, 238, 238));
+        Frame2.setRoundedkananatas(94);
+        Frame2.setRoundedkananbawah(94);
+        Frame2.setRoundedkiriatas(94);
+        Frame2.setRoundedkiribawah(94);
 
-        javax.swing.GroupLayout Frame1Layout = new javax.swing.GroupLayout(Frame1);
-        Frame1.setLayout(Frame1Layout);
-        Frame1Layout.setHorizontalGroup(
-            Frame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout Frame2Layout = new javax.swing.GroupLayout(Frame2);
+        Frame2.setLayout(Frame2Layout);
+        Frame2Layout.setHorizontalGroup(
+            Frame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1210, Short.MAX_VALUE)
         );
-        Frame1Layout.setVerticalGroup(
-            Frame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        Frame2Layout.setVerticalGroup(
+            Frame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 770, Short.MAX_VALUE)
         );
 
-        roundednew1.add(Frame1, new org.netbeans.lib.awtextra.AbsoluteConstraints(266, 40, 1210, 770));
+        roundednew1.add(Frame2, new org.netbeans.lib.awtextra.AbsoluteConstraints(266, 40, 1210, 770));
 
         MStok.setForeground(new java.awt.Color(90, 142, 149));
         MStok.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/MStok.png"))); // NOI18N
@@ -315,44 +320,54 @@ public class Kasir extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(roundednew1, javax.swing.GroupLayout.PREFERRED_SIZE, 1552, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(roundednew1, javax.swing.GroupLayout.PREFERRED_SIZE, 1552, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roundednew1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(roundednew1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
         );
 
-        setBounds(0, 0, 1552, 889);
+        setBounds(0, 0, 1552, 888);
     }// </editor-fold>//GEN-END:initComponents
 
     private void MStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MStokActionPerformed
-
+       Frame2.setLayout(new BorderLayout());
+        Frame2.removeAll();
+//        menuPanel.menu();
+//        Menu menuPanel = new Menu();
+        Frame2.add(new Transaksi());
+        Frame2.revalidate();
+        Frame2.repaint();
 
         bottunrounded(358, 440);
 
     }//GEN-LAST:event_MStokActionPerformed
 
     private void MProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MProdukActionPerformed
-        Frame1.setLayout(new BorderLayout());
-        Frame1.removeAll();
-        Frame1.add(new Menu());
-        Frame1.revalidate();
-        Frame1.repaint();
+        Frame2.setLayout(new BorderLayout());
+        Frame2.removeAll();
+//      menuPanel.menu();
+//      Menu menuPanel = new Menu();
+        Frame2.add(new Menu());
+        Frame2.revalidate();
+        Frame2.repaint();
+        
 
         //        MProduk.setSize(270, 60);
         //        MStok.setSize(224, 60);
         //        MLaporan.setSize(224, 60);
         //        MRegis.setSize(224, 60);
         //        MLogout.setSize(224, 60);
-
         bottunrounded(278, 360);
-
     }//GEN-LAST:event_MProdukActionPerformed
 
     private void MRegisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRegisActionPerformed
-        //        MRegis.setSize(270, 60);
+        Frame2.setLayout(new BorderLayout());
+        Frame2.removeAll();
+        Frame2.add(new Checkout());
+        Frame2.revalidate();
+        Frame2.repaint();
+//        MRegis.setSize(270, 60);
         //        MProduk.setSize(224, 60);
         //        MLaporan.setSize(224, 60);
         //        MStok.setSize(224, 60);
@@ -404,7 +419,11 @@ public class Kasir extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Kasir.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        try {
+    UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+    } catch (Exception ex) {
+        ex.printStackTrace();
+}
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -414,7 +433,7 @@ public class Kasir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Aset.roundednew Frame1;
+    private Aset.roundednew Frame2;
     private Aset.button MLaporan;
     private Aset.button MLogout;
     private Aset.button MProduk;

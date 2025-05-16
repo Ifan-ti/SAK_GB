@@ -16,7 +16,7 @@ public class Koneksi {
     public static Connection koneksi(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/database_kasir_2","root","");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kasir_v2","root","");
             return conn;
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, e);

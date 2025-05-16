@@ -289,7 +289,7 @@ public class Login extends javax.swing.JFrame {
         });
         roundednew1.add(button3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 370, 50));
 
-        getContentPane().add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 200, 449, 470));
+        getContentPane().add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 210, 449, 470));
 
         setBounds(0, 0, 1552, 889);
     }// </editor-fold>//GEN-END:initComponents

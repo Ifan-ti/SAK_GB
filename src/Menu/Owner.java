@@ -34,7 +34,6 @@ public class Owner extends javax.swing.JFrame {
         dalamatas.setRoundedkananbawah(22);
         roundedatas.setVisible(true);
         roundedbawah.setVisible(true);
-        
     }
 
     /**
@@ -268,7 +267,6 @@ public class Owner extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void MProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MProdukActionPerformed
         Frame1.setLayout(new BorderLayout());
         Frame1.removeAll();
@@ -320,9 +318,7 @@ public class Owner extends javax.swing.JFrame {
 //        MStok.setSize(224, 60);
 //        MLogout.setSize(224, 60);
         
-        bottunrounded(518, 600);
-        
-        
+        bottunrounded(518, 600);        
     }//GEN-LAST:event_MRegisActionPerformed
 
     private void MLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MLogoutActionPerformed
