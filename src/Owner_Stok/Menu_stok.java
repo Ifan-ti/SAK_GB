@@ -1,0 +1,579 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package Owner_Stok;
+
+/**
+ *
+ * @author Lenovo
+ */
+import java.sql.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.sql.*;
+import Koneksi.Koneksi;
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import Aset.roundednew;
+import java.text.DecimalFormat;
+import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+public class Menu_stok extends roundednew {
+    Connection conn = (Connection) Koneksi.koneksi();
+    int i = 0;
+    
+    /**
+     * Creates new form Menu_stok
+     */
+    public Menu_stok() {
+        initComponents();
+        loadData();
+    }
+    
+    private void loadData(){
+        try {
+           String sql = "SELECT * FROM stok";
+           PreparedStatement pst = conn.prepareStatement(sql);
+           
+           ResultSet rs = pst.executeQuery();
+            DefaultTableModel model = new DefaultTableModel(new String[]{"Id Stok","Nama Produk", "Jumlah", "Harga"}, 0);
+            jTable1.setModel(model);
+            while (rs.next()) {
+                Object[] row = {
+                  rs.getString("Id_Stok"),
+                  rs.getString("Nama_stok"),
+                  rs.getString("Jumlah_stok"),
+                  rs.getString("Harga_beli")
+                };
+                model.addRow(row);
+                
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Data Gagal Ditampilkan" + e.getMessage());
+        }
+    }
+    
+    private void tambahStok(){
+        try {
+            String query = "INSERT INTO stok(Id_Stok,Nama_stok,Jumlah_stok,Tanggal,Harga_beli) VALUES (NULL,?,?,CURRENT_DATE,?)";
+            PreparedStatement pst = conn.prepareStatement(query);
+            
+            
+            pst.setString(1, txt_nama.getText());
+            pst.setString(2, txt_jum.getText());
+            pst.setString(3, txt_harga.getText());
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Stok berhasil ditambahkan");
+        loadData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Gagal Menambahkan Produk" + e.getMessage());
+        }
+    }
+    
+    private void editStok(int rowIndex){
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            
+            String namaStok = model.getValueAt(rowIndex, 0).toString(); 
+            String query = "UPDATE stok SET Nama_stok = ?, Harga_beli = ? WHERE Id_Stok= ? ";
+            PreparedStatement pst = conn.prepareStatement(query);
+            
+            pst.setString(1, txt_nama.getText());
+            pst.setString(2, txt_jum.getText());
+            pst.setString(3, namaStok);
+            
+            int row = pst.executeUpdate();
+            
+            if (row>0) {
+                JOptionPane.showMessageDialog(null, "Harga Berhasil di Update", "Update", 0);
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Data Gagal di Update", "Update",1);
+            }
+            
+            loadData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Error Menghapus Data" + e.getMessage());
+        }
+    }
+    
+    private void tambahJumlah(int rowIndex){
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            
+           String namaStok = model.getValueAt(rowIndex, 0).toString();
+           String jumlahStr = model.getValueAt(rowIndex, 2).toString().replace("Kg", "").trim();
+           double jumlahLama = Double.parseDouble(jumlahStr);
+           double jumlahTambah = Double.parseDouble(txt_jum.getText()); // pastikan txt_jum hanya angka
+           double jumlahBaru = jumlahLama + jumlahTambah;
+            String query = "UPDATE stok set Jumlah_stok=?  WHERE Id_Stok=?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            
+            pst.setDouble(1, jumlahBaru); // anggap jumlah disimpan sebagai angka di DB
+            pst.setString(2, namaStok);
+            
+           
+            
+            int row = pst.executeUpdate();
+            
+            if (row>0) {
+                JOptionPane.showMessageDialog(null, "Jumlah Stok Berhasil di Tambahkan", "Update", 0);
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Data Gagal di Update", "Update",1);
+            }
+            
+            loadData();
+        } catch (Exception e) {
+        }
+    }
+      
+    
+   
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        roundednew1 = new Aset.roundednew();
+        judul = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txt_nama = new Aset.RoundedTextField();
+        jLabel3 = new javax.swing.JLabel();
+        samar_kiri = new Aset.roundednew();
+        samar_tengah = new Aset.roundednew();
+        samar_kanan = new Aset.roundednew();
+        txt_harga = new Aset.RoundedTextField();
+        txt_jum = new Aset.RoundedTextField();
+        jLabel8 = new javax.swing.JLabel();
+        button1 = new Aset.button();
+        roundednew2 = new Aset.roundednew();
+        jLabel1 = new javax.swing.JLabel();
+        btn_edit = new Aset.button();
+        edit = new Aset.button();
+        tambah_stok = new Aset.button();
+        tambah_stk = new Aset.button();
+        roundednew5 = new Aset.roundednew();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(242, 242, 242));
+        setColorend(new java.awt.Color(238, 238, 238));
+        setColorstar(new java.awt.Color(238, 238, 238));
+        setRoundedkananatas(94);
+        setRoundedkananbawah(94);
+        setRoundedkiriatas(94);
+        setRoundedkiribawah(94);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew1.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew1.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew1.setRoundedkananatas(50);
+        roundednew1.setRoundedkananbawah(50);
+        roundednew1.setRoundedkiriatas(50);
+        roundednew1.setRoundedkiribawah(50);
+        roundednew1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        judul.setFont(new java.awt.Font("Poppins", 1, 25)); // NOI18N
+        judul.setForeground(new java.awt.Color(90, 142, 149));
+        judul.setText("Tambah Stok");
+        roundednew1.add(judul, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, 31));
+
+        jLabel2.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(90, 142, 149));
+        jLabel2.setText("Nama Stok");
+        roundednew1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 31));
+
+        txt_nama.setBackground(new java.awt.Color(251, 249, 241));
+        txt_nama.setBorder(null);
+        txt_nama.setForeground(new java.awt.Color(153, 153, 153));
+        txt_nama.setCaretColor(new java.awt.Color(255, 255, 255));
+        txt_nama.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
+        txt_nama.setRoundedkananatas(15);
+        txt_nama.setRoundedkananbawah(15);
+        txt_nama.setRoundedkiriatas(15);
+        txt_nama.setRoundedkiribawah(15);
+        roundednew1.add(txt_nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 380, 50));
+
+        jLabel3.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(90, 142, 149));
+        jLabel3.setText("Jumlah Stok");
+        roundednew1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, 31));
+
+        samar_kiri.setColorend(new java.awt.Color(251, 249, 241));
+        samar_kiri.setColorstar(new java.awt.Color(251, 249, 241));
+        samar_kiri.setRoundedkananatas(15);
+        samar_kiri.setRoundedkananbawah(15);
+
+        javax.swing.GroupLayout samar_kiriLayout = new javax.swing.GroupLayout(samar_kiri);
+        samar_kiri.setLayout(samar_kiriLayout);
+        samar_kiriLayout.setHorizontalGroup(
+            samar_kiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        samar_kiriLayout.setVerticalGroup(
+            samar_kiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        roundednew1.add(samar_kiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 20, -1));
+
+        samar_tengah.setColorend(new java.awt.Color(170, 215, 217));
+        samar_tengah.setColorstar(new java.awt.Color(170, 215, 217));
+
+        samar_kanan.setColorend(new java.awt.Color(251, 249, 241));
+        samar_kanan.setColorstar(new java.awt.Color(251, 249, 241));
+        samar_kanan.setPreferredSize(new java.awt.Dimension(20, 50));
+        samar_kanan.setRoundedkiriatas(15);
+        samar_kanan.setRoundedkiribawah(15);
+
+        javax.swing.GroupLayout samar_kananLayout = new javax.swing.GroupLayout(samar_kanan);
+        samar_kanan.setLayout(samar_kananLayout);
+        samar_kananLayout.setHorizontalGroup(
+            samar_kananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+        samar_kananLayout.setVerticalGroup(
+            samar_kananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout samar_tengahLayout = new javax.swing.GroupLayout(samar_tengah);
+        samar_tengah.setLayout(samar_tengahLayout);
+        samar_tengahLayout.setHorizontalGroup(
+            samar_tengahLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, samar_tengahLayout.createSequentialGroup()
+                .addGap(0, 24, Short.MAX_VALUE)
+                .addComponent(samar_kanan, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        samar_tengahLayout.setVerticalGroup(
+            samar_tengahLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, samar_tengahLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(samar_kanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        roundednew1.add(samar_tengah, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 40, 50));
+
+        txt_harga.setBackground(new java.awt.Color(251, 249, 241));
+        txt_harga.setBorder(null);
+        txt_harga.setForeground(new java.awt.Color(153, 153, 153));
+        txt_harga.setCaretColor(new java.awt.Color(242, 242, 242));
+        txt_harga.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
+        txt_harga.setRoundedkananatas(15);
+        txt_harga.setRoundedkananbawah(15);
+        txt_harga.setRoundedkiriatas(15);
+        txt_harga.setRoundedkiribawah(15);
+        roundednew1.add(txt_harga, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 150, 50));
+
+        txt_jum.setBackground(new java.awt.Color(251, 249, 241));
+        txt_jum.setBorder(null);
+        txt_jum.setForeground(new java.awt.Color(153, 153, 153));
+        txt_jum.setCaretColor(new java.awt.Color(255, 255, 255));
+        txt_jum.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
+        txt_jum.setRoundedkananatas(15);
+        txt_jum.setRoundedkananbawah(15);
+        txt_jum.setRoundedkiriatas(15);
+        txt_jum.setRoundedkiribawah(15);
+        roundednew1.add(txt_jum, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 380, 50));
+
+        jLabel8.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(90, 142, 149));
+        jLabel8.setText("Harga Stok");
+        roundednew1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, -1, 31));
+
+        button1.setBackground(new java.awt.Color(229, 225, 218));
+        button1.setForeground(new java.awt.Color(90, 142, 149));
+        button1.setText("KONFIMASI");
+        button1.setColor(new java.awt.Color(229, 225, 218));
+        button1.setColorborder(new java.awt.Color(229, 225, 218));
+        button1.setColorclic(new java.awt.Color(229, 225, 218));
+        button1.setColorover(new java.awt.Color(229, 225, 218));
+        button1.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        button1.setRadius(15);
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+        roundednew1.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 380, 50));
+
+        add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 440, 380));
+
+        roundednew2.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew2.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew2.setPreferredSize(new java.awt.Dimension(525, 280));
+        roundednew2.setRoundedkananatas(50);
+        roundednew2.setRoundedkananbawah(50);
+        roundednew2.setRoundedkiriatas(50);
+        roundednew2.setRoundedkiribawah(50);
+        roundednew2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(90, 142, 149));
+        jLabel1.setText("Edit Stok");
+        roundednew2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
+
+        btn_edit.setForeground(new java.awt.Color(90, 142, 149));
+        btn_edit.setColor(new java.awt.Color(229, 225, 218));
+        btn_edit.setColorborder(new java.awt.Color(229, 225, 218));
+        btn_edit.setColorclic(new java.awt.Color(229, 225, 218));
+        btn_edit.setColorover(new java.awt.Color(229, 225, 218));
+        btn_edit.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        btn_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editActionPerformed(evt);
+            }
+        });
+        roundednew2.add(btn_edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 120, 180));
+
+        edit.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        edit.setRadius(30);
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        roundednew2.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 160, 210));
+
+        tambah_stok.setForeground(new java.awt.Color(90, 142, 149));
+        tambah_stok.setText("Tambah Jumlah Stok");
+        tambah_stok.setColor(new java.awt.Color(229, 225, 218));
+        tambah_stok.setColorborder(new java.awt.Color(229, 225, 218));
+        tambah_stok.setColorclic(new java.awt.Color(229, 225, 218));
+        tambah_stok.setColorover(new java.awt.Color(229, 225, 218));
+        tambah_stok.setFont(new java.awt.Font("Calibri", 1, 20)); // NOI18N
+        tambah_stok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambah_stokActionPerformed(evt);
+            }
+        });
+        roundednew2.add(tambah_stok, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 120, 180));
+
+        tambah_stk.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        tambah_stk.setRadius(30);
+        tambah_stk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambah_stkActionPerformed(evt);
+            }
+        });
+        roundednew2.add(tambah_stk, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 160, 210));
+
+        add(roundednew2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 440, 260));
+
+        roundednew5.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew5.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew5.setRoundedkananatas(50);
+        roundednew5.setRoundedkananbawah(50);
+        roundednew5.setRoundedkiriatas(50);
+        roundednew5.setRoundedkiribawah(50);
+
+        jTable1.setBackground(new java.awt.Color(242, 242, 242));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nama Produk", "Jumlah", "Harga"
+            }
+        ));
+        jTable1.setFocusable(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTable1);
+
+        javax.swing.GroupLayout roundednew5Layout = new javax.swing.GroupLayout(roundednew5);
+        roundednew5.setLayout(roundednew5Layout);
+        roundednew5Layout.setHorizontalGroup(
+            roundednew5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundednew5Layout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
+        );
+        roundednew5Layout.setVerticalGroup(
+            roundednew5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(roundednew5Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+
+        add(roundednew5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 450, 660));
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+       switch(i){
+           case 0 :
+                tambahStok();
+                break;
+           case 1 :
+                int selectedRow = jTable1.getSelectedRow();
+                    if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Pilih baris yang ingin di edit.");
+                    return;
+                    }else{
+                editStok(selectedRow);
+                    }
+                    break;
+           case 2 :
+                selectedRow = jTable1.getSelectedRow();
+                    if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Pilih baris yang ingin di edit.");
+                    return;
+                    }else{
+                    tambahJumlah(selectedRow);
+                    }
+                    break;
+       }
+    }//GEN-LAST:event_button1ActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editActionPerformed
+
+    private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
+        int b;
+        if (i == 1){
+            i = 0;
+        }else{
+            i = 1;
+        }
+
+        switch(i){
+            case 0 :
+            judul.setText("Tambah Stok");
+            samar_kiri.setVisible(true);
+            samar_kanan.setVisible(true);
+            samar_tengah.setVisible(true);
+            jLabel8.setVisible(true);
+            txt_harga.setVisible(true);
+            jLabel3.setVisible(true);
+            break;
+            
+            case 1 :
+                
+            judul.setText("Edit Stok");
+             judul.setLocation(140, 20);
+            jLabel3.setText("Harga Stok");
+            samar_kiri.setVisible(false);
+            samar_kanan.setVisible(false);
+            samar_tengah.setVisible(false);
+            jLabel8.setVisible(false);
+            txt_harga.setVisible(false);
+//            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("Gambar\\Edit_Produk.png"));
+//            btn_edit.setIcon(icon);
+//            btn_edit.setText("Edit");
+            
+            break;
+        }
+//        // TODO add your handling code here:
+//        
+//            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("Gambar\\Edit_Produk.png"));
+//            Update.setIcon(icon);
+//            Update.setText("Edit \n"+"Produk");
+      
+    }//GEN-LAST:event_btn_editActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+             int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow >= 0) {
+            txt_nama.setText(jTable1.getValueAt(selectedRow, 1).toString());
+            txt_jum.setText(jTable1.getValueAt(selectedRow, 2).toString());
+            txt_harga.setText(jTable1.getValueAt(selectedRow, 3).toString());
+        }
+    
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void tambah_stokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambah_stokActionPerformed
+        // TODO add your handling code here:
+        
+         int b;
+        if (i == 2){
+            i = 0;
+        }else{
+            i = 2;
+        }
+
+        switch(i){
+            case 0 :
+            judul.setText("Tambah Stok");
+            samar_kiri.setVisible(true);
+            samar_kanan.setVisible(true);
+            samar_tengah.setVisible(true);
+            jLabel8.setVisible(true);
+            txt_harga.setVisible(true);
+            jLabel3.setVisible(true);
+            break;
+            
+            case 1 :
+                
+            judul.setText("Edit Stok");
+            judul.setLocation(140, 20);
+            jLabel3.setText("Harga Stok");
+            samar_kiri.setVisible(false);
+            samar_kanan.setVisible(false);
+            samar_tengah.setVisible(false);
+            jLabel8.setVisible(false);
+            txt_jum.setVisible(false);
+//            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("Gambar\\Edit_Produk.png"));
+//            btn_edit.setIcon(icon);
+//            btn_edit.setText("Edit");
+//            
+            break;
+            
+            case 2 :
+                judul.setText("Tambah Jumlah Stok");
+                judul.setBounds(100, 20, 250, 31);
+                samar_kiri.setVisible(false);
+            samar_kanan.setVisible(false);
+            samar_tengah.setVisible(false);
+            jLabel8.setVisible(false);
+            txt_harga.setVisible(false);
+            jLabel3.setText("Jumlah Stok");
+                
+        }
+    }//GEN-LAST:event_tambah_stokActionPerformed
+
+    private void tambah_stkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambah_stkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tambah_stkActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Aset.button btn_edit;
+    private Aset.button button1;
+    private Aset.button edit;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel judul;
+    private Aset.roundednew roundednew1;
+    private Aset.roundednew roundednew2;
+    private Aset.roundednew roundednew5;
+    private Aset.roundednew samar_kanan;
+    private Aset.roundednew samar_kiri;
+    private Aset.roundednew samar_tengah;
+    private Aset.button tambah_stk;
+    private Aset.button tambah_stok;
+    private Aset.RoundedTextField txt_harga;
+    private Aset.RoundedTextField txt_jum;
+    private Aset.RoundedTextField txt_nama;
+    // End of variables declaration//GEN-END:variables
+}
