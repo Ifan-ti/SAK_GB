@@ -49,6 +49,8 @@ public class Menu_stok extends roundednew {
                   rs.getString("Harga_beli")
                 };
                 model.addRow(row);
+             
+                
                 
             }
         } catch (Exception e) {
