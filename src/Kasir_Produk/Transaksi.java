@@ -11,6 +11,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +25,92 @@ public class Transaksi extends javax.swing.JPanel {
     public Transaksi() {
         initComponents();
         tampildata();
+        rangebaru();
+
+    }
+    public void rangebaru() {
+        double totalHariini = sekarang();
+        double totalKemarin = kemarin();
+        double persen;
+//        ikon();
+        if (totalKemarin !=0) {
+        persen = ((totalHariini-totalKemarin) / totalKemarin) * 100;
+    }
+        else {
+            persen = totalHariini == 0 ? 0:100;
+        }
+        double persenUntukTampilan = Math.abs(persen);
+        range.setText(String.format("%.0f", persenUntukTampilan));
+        
+         
+
+if (persen > 0) {
+    down.setIcon(new ImageIcon("nak2.png")); // Ganti dengan path ikon naik
+//    up.setText(String.valueOf(nilai));
+} else if (persen < 0) {
+    up.setIcon(new ImageIcon("nak1.png")); // Ganti dengan path ikon turun
+//    down.setText(String.valueOf(nilai));
+} else {
+    up.setIcon(null); // atau ikon netral jika nilai = 0
+    down.setIcon(null);
+}
+    }
+    private int kemarin() {
+        String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
+                     "FROM pesanan " +
+                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
+                     "WHERE pesanan.Tanggal_Pesanan = ?";
+        
+        Connection conn = Koneksi.koneksi();
+        int PelangganKemarin = 0;
+        try ( 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            // Ambil tanggal hari ini
+            LocalDate kemarin = LocalDate.now().minusDays(1);
+
+            // Set parameter tanggal ke PreparedStatement
+            ps.setDate(1, Date.valueOf(kemarin));
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                PelangganKemarin = rs.getInt(1);
+//                System.out.println("Jumlah pelanggan unik hari ini: " + jumlahPelangganUnik);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return PelangganKemarin;
+    }
+    private int sekarang() {
+        String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
+                     "FROM pesanan " +
+                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
+                     "WHERE pesanan.Tanggal_Pesanan = ?";
+        Connection conn = Koneksi.koneksi();
+        int PelangganSekarang = 0;
+        try ( 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            // Ambil tanggal hari ini
+            LocalDate hariini = LocalDate.now();
+
+            // Set parameter tanggal ke PreparedStatement
+            ps.setDate(1, Date.valueOf(hariini));
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                PelangganSekarang = rs.getInt(1);
+//                System.out.println("Jumlah pelanggan unik hari ini: " + jumlahPelangganUnik);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return PelangganSekarang;
     }
     public void tampildata() {
         Connection conn;
@@ -95,7 +182,10 @@ try {
         table1 = new Aset.JTableRounded();
         roundednew6 = new Aset.roundednew();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        range = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        up = new javax.swing.JLabel();
+        down = new javax.swing.JLabel();
 
         roundednew2.setColorend(new java.awt.Color(242, 242, 242));
         roundednew2.setColorstar(new java.awt.Color(242, 242, 242));
@@ -248,35 +338,33 @@ try {
         roundednew6.setRoundedkananbawah(50);
         roundednew6.setRoundedkiriatas(50);
         roundednew6.setRoundedkiribawah(50);
+        roundednew6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Poppins ExtraBold", 0, 100)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(60, 63, 65));
         jLabel1.setText("%");
+        roundednew6.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Poppins ExtraBold", 0, 100)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(60, 63, 65));
-        jLabel2.setText("0");
+        range.setFont(new java.awt.Font("Poppins ExtraBold", 0, 100)); // NOI18N
+        range.setForeground(new java.awt.Color(60, 63, 65));
+        range.setText("0");
+        roundednew6.add(range, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 60, -1, -1));
 
-        javax.swing.GroupLayout roundednew6Layout = new javax.swing.GroupLayout(roundednew6);
-        roundednew6.setLayout(roundednew6Layout);
-        roundednew6Layout.setHorizontalGroup(
-            roundednew6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(roundednew6Layout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addContainerGap(258, Short.MAX_VALUE))
-        );
-        roundednew6Layout.setVerticalGroup(
-            roundednew6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(roundednew6Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addGroup(roundednew6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addContainerGap(122, Short.MAX_VALUE))
-        );
+        jLabel3.setFont(new java.awt.Font("Poppins Black", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(60, 63, 65));
+        jLabel3.setText("Dari Transaksi Kemarin");
+        roundednew6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(123, 228, -1, -1));
+
+        up.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/nak2.png"))); // NOI18N
+        up.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                upMouseClicked(evt);
+            }
+        });
+        roundednew6.add(up, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 228, -1, -1));
+
+        down.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/nak1.png"))); // NOI18N
+        roundednew6.add(down, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 228, -1, -1));
 
         javax.swing.GroupLayout roundednew2Layout = new javax.swing.GroupLayout(roundednew2);
         roundednew2.setLayout(roundednew2Layout);
@@ -325,16 +413,22 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_konfirActionPerformed
 
+    private void upMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_upMouseClicked
+       
+    }//GEN-LAST:event_upMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel down;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel judul1;
     private javax.swing.JLabel judul13;
     private javax.swing.JLabel judul14;
     private javax.swing.JLabel judul16;
     private Aset.button konfir;
+    private javax.swing.JLabel range;
     private Aset.roundednew roundednew1;
     private Aset.roundednew roundednew2;
     private Aset.roundednew roundednew3;
@@ -342,5 +436,6 @@ try {
     private Aset.JTableRounded table1;
     private com.toedter.calendar.JDateChooser tgl_akhir;
     private com.toedter.calendar.JDateChooser tgl_awal;
+    private javax.swing.JLabel up;
     // End of variables declaration//GEN-END:variables
 }
