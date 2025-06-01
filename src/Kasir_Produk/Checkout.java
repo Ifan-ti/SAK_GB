@@ -56,24 +56,18 @@ public class Checkout extends roundednew {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kasir_v2", "root", "");
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT \n" +
-            "    ps.Jumlah_Pesanan, \n" +
-            "    pr.Nama_Produk, \n" +
-            "    pr.Harga, \n" +
-            "    ps.Total_Harga, \n" +
-            "    py.Uang_Masuk \n" +
-            "FROM \n" +
-            "    detail_pesanan AS dp \n" +
-            "JOIN \n" +
-            "    pesanan AS ps ON dp.Id_Pesanan = ps.Id_Pesanan \n" +
-            "JOIN \n" +
-            "    pelanggan AS p ON dp.Id_Pelanggan = p.ID_Pelanggan \n" +
-            "JOIN \n" +
-            "    produk AS pr ON pr.Id_Produk = ps.Id_Produk \n" +
-            "JOIN \n" +
-            "    pembayaran AS py ON dp.Id_Pembayaran = py.Id_Pembayaran \n" +
-            "WHERE p.ID_Pelanggan = ? \n" +
+"    pl.Id_Pelanggan, \n" +
+"    dp.Jumlah_Pesanan, \n" +
+"    pr.Nama_Produk, \n" +
+"    ps.Total_Harga, \n" +
+"    py.Uang_Masuk \n" +
+"FROM produk AS pr\n" +
+"JOIN detail_pesanan AS dp ON dp.Id_Produk = pr.Id_Produk\n" +
+"JOIN pesanan AS ps ON ps.Id_Pesanan = dp.Id_Pesanan\n" +
+"JOIN pembayaran AS py ON py.Id_Pembayaran = ps.Id_Pembayaran\n" +
+"JOIN pelanggan AS pl ON pl.Id_Pelanggan = ps.Id_Pelanggan\n" +
+"WHERE pl.Id_Pelanggan = ? \n" +
             "LIMIT 3"
-       
         );
         String id = id_plg.getText();
         stmt.setString(1, id);        
@@ -114,11 +108,11 @@ public class Checkout extends roundednew {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kasir_v2", "root", "");
         
         PreparedStatement stmt = conn.prepareStatement(
-            "SELECT SUM(py.Uang_Masuk) AS Total_Uang_Masuk " +
-            "FROM detail_pesanan dp " +
-            "JOIN pelanggan p ON dp.Id_Pelanggan = p.ID_Pelanggan " +
-            "JOIN pembayaran py ON dp.Id_Pembayaran = py.Id_Pembayaran " +
-            "WHERE p.Nama_Pelanggan = ?"
+            "SELECT SUM(py.Uang_Masuk) AS Total_Uang_Masuk \n" +
+"FROM pesanan ps\n" +
+"JOIN pelanggan p ON ps.Id_Pelanggan = p.Id_Pelanggan\n" +
+"JOIN pembayaran py ON ps.Id_Pembayaran = py.Id_Pembayaran\n" +
+"WHERE p.Nama_Pelanggan = ?"
         );
         stmt.setString(1, nm);
 
@@ -145,11 +139,10 @@ public class Checkout extends roundednew {
 
         // Query untuk ambil data pesanan berdasarkan nama pelanggan
         PreparedStatement stmt = conn.prepareStatement(
-            "SELECT psn.Id_Pesanan, psn.Status " +
-            "FROM kasir_v2.pelanggan AS pl " +
-            "INNER JOIN kasir_v2.detail_pesanan AS dpsn ON pl.Id_Pelanggan = dpsn.Id_Pelanggan " +
-            "INNER JOIN kasir_v2.pesanan AS psn ON dpsn.Id_Pesanan = psn.Id_Pesanan " +
-            "WHERE pl.Nama_Pelanggan = ? " +
+            "SELECT psn.Id_Pesanan, psn.Status, pl.Nama_Pelanggan \n" +
+"FROM kasir_v2.pelanggan AS pl \n" +
+"INNER JOIN kasir_v2.pesanan AS psn ON pl.Id_Pelanggan = psn.Id_Pelanggan \n" +
+"WHERE pl.Nama_Pelanggan = ? " +
             "ORDER BY pl.Id_Pelanggan DESC LIMIT 1"
         );
         
