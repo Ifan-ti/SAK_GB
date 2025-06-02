@@ -59,7 +59,6 @@ if (persen > 0) {
     private int kemarin() {
         String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
                      "FROM pesanan " +
-                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
                      "WHERE pesanan.Tanggal_Pesanan = ?";
         
         Connection conn = Koneksi.koneksi();
@@ -88,7 +87,6 @@ if (persen > 0) {
     private int sekarang() {
         String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
                      "FROM pesanan " +
-                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
                      "WHERE pesanan.Tanggal_Pesanan = ?";
         Connection conn = Koneksi.koneksi();
         int PelangganSekarang = 0;
@@ -122,7 +120,22 @@ if (nm_plg.getText() == null ) {
     return; // Hentikan eksekusi selanjutnya
 }
 
-String sql = "SELECT Tanggal_Pesanan, Nama_Pelanggan, Nama_Produk, Jumlah_Pesanan, Total_Harga, Status FROM pesanan JOIN produk ON pesanan.Id_Produk = produk.Id_Produk JOIN detail_pesanan ON detail_pesanan.Id_Pesanan = pesanan.Id_Pesanan JOIN pelanggan ON detail_pesanan.Id_Pelanggan = pelanggan.Id_Pelanggan  WHERE pelanggan.Nama_Pelanggan = ? ORDER BY Tanggal_Pesanan ASC";
+String sql = "SELECT \n" +
+"    pesanan.Tanggal_pesanan, \n" +
+"    pelanggan.Nama_Pelanggan, \n" +
+"    produk.Nama_Produk, \n" +
+"    detail_pesanan.Jumlah_Pesanan, \n" +
+"    pesanan.Total_Harga, \n" +
+"    pesanan.Status\n" +
+"FROM \n" +
+"    detail_pesanan\n" +
+"JOIN \n" +
+"    produk ON detail_pesanan.Id_Produk = produk.Id_Produk\n" +
+"JOIN \n" +
+"    pesanan ON detail_pesanan.Id_Pesanan = pesanan.Id_Pesanan\n" +
+"JOIN \n" +
+"    pelanggan ON pesanan.Id_Pelanggan = pelanggan.Id_Pelanggan\n" +
+"WHERE pelanggan.Nama_Pelanggan = ? ORDER BY Tanggal_Pesanan ASC";
 try {
      String nama = nm_plg.getText();
     conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kasir_v2", "root", "");
