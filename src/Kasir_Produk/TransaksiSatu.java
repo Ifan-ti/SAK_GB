@@ -60,9 +60,8 @@ if (persen > 0) {
 }
     }
     private int kemarin() {
-        String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
+        String sql = "SELECT COUNT(DISTINCT pesanan.Id_Pelanggan) " +
                      "FROM pesanan " +
-                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
                      "WHERE pesanan.Tanggal_Pesanan = ?";
         
         Connection conn = Koneksi.koneksi();
@@ -91,7 +90,6 @@ if (persen > 0) {
     private int sekarang() {
         String sql = "SELECT COUNT(DISTINCT detail_pesanan.Id_Pelanggan) " +
                      "FROM pesanan " +
-                     "JOIN detail_pesanan ON pesanan.Id_Pesanan = detail_pesanan.Id_Pesanan " +
                      "WHERE pesanan.Tanggal_Pesanan = ?";
         Connection conn = Koneksi.koneksi();
         int PelangganSekarang = 0;
@@ -129,7 +127,23 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 String tglAwalStr = sdf.format(tgl_awal.getDate());
 String tglAkhirStr = sdf.format(tgl_akhir.getDate());
 
-String sql = "SELECT Tanggal_Pesanan, Nama_Pelanggan, Nama_Produk, Jumlah_Pesanan, Total_Harga, Status FROM pesanan JOIN produk ON pesanan.Id_Produk = produk.Id_Produk JOIN detail_pesanan ON detail_pesanan.Id_Pesanan = pesanan.Id_Pesanan JOIN pelanggan ON detail_pesanan.Id_Pelanggan = pelanggan.Id_Pelanggan  WHERE Tanggal_Pesanan BETWEEN ? AND ? ORDER BY Tanggal_Pesanan ASC";
+String sql = "SELECT \n" +
+"    pesanan.Tanggal_pesanan, \n" +
+"    pelanggan.Nama_Pelanggan, \n" +
+"    produk.Nama_Produk, \n" +
+"    detail_pesanan.Jumlah_Pesanan, \n" +
+"    pesanan.Total_Harga, \n" +
+"    pesanan.Status\n" +
+"FROM \n" +
+"    detail_pesanan\n" +
+"JOIN \n" +
+"    produk ON detail_pesanan.Id_Produk = produk.Id_Produk\n" +
+"JOIN \n" +
+"    pesanan ON detail_pesanan.Id_Pesanan = pesanan.Id_Pesanan\n" +
+"JOIN \n" +
+"    pelanggan ON pesanan.Id_Pelanggan = pelanggan.Id_Pelanggan\n" +
+"WHERE \n" +
+"    pesanan.Tanggal_pesanan  BETWEEN ? AND ? ORDER BY pesanan.Tanggal_pesanan ASC";
 try {
     conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kasir_v2", "root", "");
     pst = conn.prepareStatement(sql);
