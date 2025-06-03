@@ -166,6 +166,43 @@ public class Laporan_Laba extends roundednew {
         }
     }
     
+    
+    //Input pengeluaran
+    private void tambahPengeluaran() {
+    String tanggal = java.time.LocalDate.now().toString(); // tanggal otomatis
+    String nama = JOptionPane.showInputDialog(null, "Masukkan Nama Barang:");
+    String keterangan = JOptionPane.showInputDialog(null, "Masukkan Keterangan:");
+    String jumlahStr = JOptionPane.showInputDialog(null, "Masukkan Jumlah:");
+    String biayaStr = JOptionPane.showInputDialog(null, "Masukkan Biaya per Item:");
+
+    if (nama != null && keterangan != null && jumlahStr != null && biayaStr != null) {
+        try {
+            int jumlah = Integer.parseInt(jumlahStr);
+            int biaya = Integer.parseInt(biayaStr);
+            int total = jumlah * biaya;
+
+            String sql = "INSERT INTO view_laporan_pengeluaran (Tanggal, Nama_Pengeluaran, Keterangan, Jumlah, Biaya, Total) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, tanggal);
+            pst.setString(2, nama);
+            pst.setString(3, keterangan);
+            pst.setInt(4, jumlah);
+            pst.setInt(5, biaya);
+            pst.setInt(6, total);
+
+            pst.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Pengeluaran berhasil ditambahkan.");
+            loadDataPengeluaran(); // refresh tabel
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Jumlah dan Biaya harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Gagal menyimpan ke database:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+    
+    
     //FUNGSI KONFIRMASI
 
     private void lapLaba(){
@@ -263,7 +300,7 @@ public class Laporan_Laba extends roundednew {
     }
     
     private void lapPl(){
-        java.util.Date awal = tglAwal.getDate();
+    java.util.Date awal = tglAwal.getDate();
     java.util.Date akhir = tglAkhir.getDate();
 
     if (awal == null || akhir == null) {
@@ -415,12 +452,13 @@ public class Laporan_Laba extends roundednew {
         roundednew2 = new Aset.roundednew();
         judul = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        input_pengeluaran = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         btnkonfir = new Aset.button();
         txt_harga = new Aset.RoundedTextField();
         tglAkhir = new com.toedter.calendar.JDateChooser();
         tglAwal = new com.toedter.calendar.JDateChooser();
+        jLabel17 = new javax.swing.JLabel();
         roundednew3 = new Aset.roundednew();
         jLabel7 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -472,9 +510,9 @@ public class Laporan_Laba extends roundednew {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        roundednew1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 860, 270));
+        roundednew1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 860, 270));
 
-        add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 990, 350));
+        add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 940, 350));
 
         roundednew2.setColorend(new java.awt.Color(170, 215, 217));
         roundednew2.setColorstar(new java.awt.Color(170, 215, 217));
@@ -488,17 +526,22 @@ public class Laporan_Laba extends roundednew {
         judul.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
         judul.setForeground(new java.awt.Color(90, 142, 149));
         judul.setText("Filter Tanggal");
-        roundednew2.add(judul, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, 31));
+        roundednew2.add(judul, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Poppins", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(90, 142, 149));
         jLabel3.setText("Total Laba Bersih");
-        roundednew2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 31));
+        roundednew2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, 31));
 
-        jLabel8.setFont(new java.awt.Font("Poppins", 0, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(90, 142, 149));
-        jLabel8.setText("Tanggal akhir");
-        roundednew2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, -1, 31));
+        input_pengeluaran.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
+        input_pengeluaran.setForeground(new java.awt.Color(90, 142, 149));
+        input_pengeluaran.setText("Masukkan Pengeluaran ");
+        input_pengeluaran.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                input_pengeluaranMouseClicked(evt);
+            }
+        });
+        roundednew2.add(input_pengeluaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, -1, 31));
 
         jLabel13.setFont(new java.awt.Font("Poppins", 0, 24)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(90, 142, 149));
@@ -519,7 +562,7 @@ public class Laporan_Laba extends roundednew {
                 btnkonfirActionPerformed(evt);
             }
         });
-        roundednew2.add(btnkonfir, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 360, 50));
+        roundednew2.add(btnkonfir, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 360, 50));
 
         txt_harga.setBackground(new java.awt.Color(242, 242, 242));
         txt_harga.setBorder(null);
@@ -529,11 +572,16 @@ public class Laporan_Laba extends roundednew {
         txt_harga.setRoundedkananbawah(15);
         txt_harga.setRoundedkiriatas(15);
         txt_harga.setRoundedkiribawah(15);
-        roundednew2.add(txt_harga, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 360, 40));
+        roundednew2.add(txt_harga, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 360, 40));
         roundednew2.add(tglAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, 170, 40));
         roundednew2.add(tglAwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 170, 40));
 
-        add(roundednew2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 30, 440, 350));
+        jLabel17.setFont(new java.awt.Font("Poppins", 0, 24)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(90, 142, 149));
+        jLabel17.setText("Tanggal akhir");
+        roundednew2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, -1, 31));
+
+        add(roundednew2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 440, 350));
 
         roundednew3.setColorend(new java.awt.Color(170, 215, 217));
         roundednew3.setColorstar(new java.awt.Color(170, 215, 217));
@@ -910,6 +958,14 @@ public class Laporan_Laba extends roundednew {
          }
     }//GEN-LAST:event_btnlapopnameActionPerformed
 
+    private void input_pengeluaranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_input_pengeluaranMouseClicked
+        // TODO add your handling code here:
+        
+        tambahPengeluaran();
+        
+        
+    }//GEN-LAST:event_input_pengeluaranMouseClicked
+
          
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -919,6 +975,7 @@ public class Laporan_Laba extends roundednew {
     private Aset.button btnlapstok;
     private Aset.button btnpresensi;
     private Aset.button btnprintlaporan;
+    private javax.swing.JLabel input_pengeluaran;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -926,6 +983,7 @@ public class Laporan_Laba extends roundednew {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -934,7 +992,6 @@ public class Laporan_Laba extends roundednew {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
