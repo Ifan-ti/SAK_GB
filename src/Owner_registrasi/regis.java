@@ -5,6 +5,12 @@
 package Owner_registrasi;
 
 import Aset.roundednew;
+import Koneksi.Koneksi;
+import java.sql.*;
+import java.sql.DriverManager;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -12,13 +18,107 @@ import Aset.roundednew;
  */
 public class regis extends roundednew {
 
-    /**
-     * Creates new form regis
-     */
+    private Connection conn;
+    int i = 0;
     public regis() {
+        conn = Koneksi.koneksi();
         initComponents();
+        loadData();
     }
+        
+    public void HapusUser(int rowIndex) {
+        try {
+            
+            DefaultTableModel model = (DefaultTableModel) tabelRegis.getModel();
+            
+            String Id = model.getValueAt(rowIndex, 0).toString(); 
+            String query = "DELETE FROM user WHERE Id_user = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(query);
+             pst.setString(1, Id);
+             pst.executeUpdate();
+             
+            loadData(); 
+            
+            
+            
+            JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error deleting data: " + e.getMessage());
+        }
+       
+     }
+    
+    
+    private void tambahUser(){
+          String username = txt_username.getText();
+        String Makanan = txt_makanan.getText();
+        String password = txt_password.getText();
+        String Role = cbRole.getSelectedItem().toString();
+        
+        if (username.isEmpty() || Makanan.isEmpty() || password.isEmpty() || Role.isEmpty() ){
+        JOptionPane.showMessageDialog(this, "SEMUA KOLOM HARUS DIISI", "EROR!", JOptionPane.ERROR_MESSAGE);
+        return;
+        }
+        
+        try {
+            String query = "INSERT INTO user (username,Makanan_favorite,Password, Role) VALUES (?,?,?,?)";
+            try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, username);
+            ps.setString(2, Makanan);
+            ps.setString(3, password);
+            ps.setString(4, Role);
+            
+            int rowsInserted = ps.executeUpdate();
+            if(rowsInserted > 0){
+                JOptionPane.showMessageDialog(null, "Akun berhasil ditambahkan!");
+                txt_username.setText("");
+                txt_makanan.setText("");
+                txt_password.setText("");
+                cbRole.setSelectedIndex(0);
+                loadData();
+                }
+            }
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(this, "Terjadi kesalahan:" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+}
+      
+    }
+    public void UpdateUser (int rowIndex) {
+        try {
+            
+            DefaultTableModel model = (DefaultTableModel) tabelRegis.getModel();
+            
+            
+            String id_user = model.getValueAt(rowIndex, 0).toString(); 
+            String query = "UPDATE user SET Username = ?, Makanan_favorite = ? ,Password = ?  WHERE Id_user = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+             pst.setString(1, txt_username.getText());
+             pst.setString(2, txt_makanan.getText());
+             pst.setString(3, txt_password.getText());
+             pst.setString(4, id_user);
+             
+             int row = pst.executeUpdate();
+             
+             if (row>0){
+                 JOptionPane.showMessageDialog(null, "User Berhasil Di Update", "Update", 1);
+             }else{
+                 JOptionPane.showMessageDialog(null, "User Gagal Di Update", "Update", 0);
 
+             }
+             
+            loadData(); // Update table after delete
+            
+            
+            
+            
+         
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error deleting data: " + e.getMessage());
+        }
+       
+     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,6 +128,62 @@ public class regis extends roundednew {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollBar1 = new javax.swing.JScrollBar();
+        roundednew8 = new Aset.roundednew();
+        roundednew9 = new Aset.roundednew();
+        button5 = new Aset.button();
+        Hapus3 = new Aset.button();
+        Update3 = new Aset.button();
+        judul3 = new javax.swing.JLabel();
+        roundednew10 = new Aset.roundednew();
+        roundednew11 = new Aset.roundednew();
+        button6 = new Aset.button();
+        Hapus4 = new Aset.button();
+        Update4 = new Aset.button();
+        judul4 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        txt_makanan = new javax.swing.JTextField();
+        judul5 = new javax.swing.JLabel();
+        txt_username = new javax.swing.JTextField();
+        judul7 = new javax.swing.JLabel();
+        cbRole = new javax.swing.JComboBox<>();
+        judul8 = new javax.swing.JLabel();
+        txt_password = new javax.swing.JTextField();
+        judul11 = new javax.swing.JLabel();
+        btn_konfir = new javax.swing.JButton();
+        roundednew12 = new Aset.roundednew();
+        roundednew13 = new Aset.roundednew();
+        button7 = new Aset.button();
+        Hapus5 = new Aset.button();
+        Update5 = new Aset.button();
+        judul9 = new javax.swing.JLabel();
+        btn_RFID = new javax.swing.JButton();
+        roundednew14 = new Aset.roundednew();
+        roundednew15 = new Aset.roundednew();
+        button8 = new Aset.button();
+        Hapus6 = new Aset.button();
+        Update6 = new Aset.button();
+        judul10 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        roundednew16 = new Aset.roundednew();
+        roundednew17 = new Aset.roundednew();
+        button9 = new Aset.button();
+        Hapus7 = new Aset.button();
+        Update7 = new Aset.button();
+        roundednew18 = new Aset.roundednew();
+        roundednew19 = new Aset.roundednew();
+        button10 = new Aset.button();
+        Hapus8 = new Aset.button();
+        Update8 = new Aset.button();
+        judul12 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelRegis = new javax.swing.JTable();
+        roundednew1 = new Aset.roundednew();
+        btn_delete = new javax.swing.JButton();
+        btn_edit = new javax.swing.JButton();
+        txt_user = new javax.swing.JButton();
+
         setColorend(new java.awt.Color(238, 238, 238));
         setColorstar(new java.awt.Color(238, 238, 238));
         setPreferredSize(new java.awt.Dimension(1180, 740));
@@ -35,20 +191,734 @@ public class regis extends roundednew {
         setRoundedkananbawah(94);
         setRoundedkiriatas(94);
         setRoundedkiribawah(94);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
+        roundednew8.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew8.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew8.setRoundedkananatas(92);
+        roundednew8.setRoundedkananbawah(92);
+        roundednew8.setRoundedkiriatas(92);
+        roundednew8.setRoundedkiribawah(92);
+        roundednew8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew9.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew9.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew9.setRoundedkananatas(92);
+        roundednew9.setRoundedkananbawah(92);
+        roundednew9.setRoundedkiriatas(92);
+        roundednew9.setRoundedkiribawah(92);
+        roundednew9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button5.setText("button2");
+        button5.setRadius(30);
+        button5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button5ActionPerformed(evt);
+            }
+        });
+        roundednew9.add(button5, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus3.setRadius(30);
+        Hapus3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus3ActionPerformed(evt);
+            }
+        });
+        roundednew9.add(Hapus3, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update3.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update3.setRadius(30);
+        Update3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update3ActionPerformed(evt);
+            }
+        });
+        roundednew9.add(Update3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew8.add(roundednew9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        judul3.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        judul3.setForeground(new java.awt.Color(255, 255, 255));
+        judul3.setText("Makanan Favorit");
+        roundednew8.add(judul3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, 31));
+
+        roundednew10.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew10.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew10.setRoundedkananatas(92);
+        roundednew10.setRoundedkananbawah(92);
+        roundednew10.setRoundedkiriatas(92);
+        roundednew10.setRoundedkiribawah(92);
+        roundednew10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew11.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew11.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew11.setRoundedkananatas(92);
+        roundednew11.setRoundedkananbawah(92);
+        roundednew11.setRoundedkiriatas(92);
+        roundednew11.setRoundedkiribawah(92);
+        roundednew11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button6.setText("button2");
+        button6.setRadius(30);
+        button6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button6ActionPerformed(evt);
+            }
+        });
+        roundednew11.add(button6, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus4.setRadius(30);
+        Hapus4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus4ActionPerformed(evt);
+            }
+        });
+        roundednew11.add(Hapus4, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update4.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update4.setRadius(30);
+        Update4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update4ActionPerformed(evt);
+            }
+        });
+        roundednew11.add(Update4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew10.add(roundednew11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        judul4.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
+        judul4.setForeground(new java.awt.Color(255, 255, 255));
+        judul4.setText("Daftar RFID");
+        roundednew10.add(judul4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, 31));
+
+        jButton4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jButton4.setText("AKTIFKAN RFID");
+        roundednew10.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 230, 60));
+
+        roundednew8.add(roundednew10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        txt_makanan.setBackground(new java.awt.Color(255, 255, 255));
+        txt_makanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_makananActionPerformed(evt);
+            }
+        });
+        roundednew8.add(txt_makanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 180, 40));
+
+        judul5.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
+        judul5.setForeground(new java.awt.Color(255, 255, 255));
+        judul5.setText("Data Diri User");
+        roundednew8.add(judul5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, -1, 31));
+
+        txt_username.setBackground(new java.awt.Color(255, 255, 255));
+        txt_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_usernameActionPerformed(evt);
+            }
+        });
+        roundednew8.add(txt_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 180, 40));
+
+        judul7.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        judul7.setForeground(new java.awt.Color(255, 255, 255));
+        judul7.setText("Username");
+        roundednew8.add(judul7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 31));
+
+        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Owner", "Kasir", " ", " " }));
+        roundednew8.add(cbRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, 180, 40));
+
+        judul8.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        judul8.setForeground(new java.awt.Color(255, 255, 255));
+        judul8.setText("Role");
+        roundednew8.add(judul8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, -1, 31));
+
+        txt_password.setBackground(new java.awt.Color(255, 255, 255));
+        txt_password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_passwordActionPerformed(evt);
+            }
+        });
+        roundednew8.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 180, 40));
+
+        judul11.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        judul11.setForeground(new java.awt.Color(255, 255, 255));
+        judul11.setText("Password");
+        roundednew8.add(judul11, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, -1, 31));
+
+        btn_konfir.setText("KONFIRMASI");
+        btn_konfir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_konfirActionPerformed(evt);
+            }
+        });
+        roundednew8.add(btn_konfir, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 170, 50));
+
+        add(roundednew8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 450, 324));
+
+        roundednew12.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew12.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew12.setRoundedkananatas(92);
+        roundednew12.setRoundedkananbawah(92);
+        roundednew12.setRoundedkiriatas(92);
+        roundednew12.setRoundedkiribawah(92);
+        roundednew12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew13.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew13.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew13.setRoundedkananatas(92);
+        roundednew13.setRoundedkananbawah(92);
+        roundednew13.setRoundedkiriatas(92);
+        roundednew13.setRoundedkiribawah(92);
+        roundednew13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button7.setText("button2");
+        button7.setRadius(30);
+        button7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button7ActionPerformed(evt);
+            }
+        });
+        roundednew13.add(button7, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus5.setRadius(30);
+        Hapus5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus5ActionPerformed(evt);
+            }
+        });
+        roundednew13.add(Hapus5, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update5.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update5.setRadius(30);
+        Update5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update5ActionPerformed(evt);
+            }
+        });
+        roundednew13.add(Update5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew12.add(roundednew13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        judul9.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
+        judul9.setForeground(new java.awt.Color(255, 255, 255));
+        judul9.setText("Daftar RFID");
+        roundednew12.add(judul9, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, 31));
+
+        btn_RFID.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btn_RFID.setText("AKTIFKAN RFID");
+        roundednew12.add(btn_RFID, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 230, 60));
+
+        roundednew14.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew14.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew14.setRoundedkananatas(92);
+        roundednew14.setRoundedkananbawah(92);
+        roundednew14.setRoundedkiriatas(92);
+        roundednew14.setRoundedkiribawah(92);
+        roundednew14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew15.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew15.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew15.setRoundedkananatas(92);
+        roundednew15.setRoundedkananbawah(92);
+        roundednew15.setRoundedkiriatas(92);
+        roundednew15.setRoundedkiribawah(92);
+        roundednew15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button8.setText("button2");
+        button8.setRadius(30);
+        button8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button8ActionPerformed(evt);
+            }
+        });
+        roundednew15.add(button8, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus6.setRadius(30);
+        Hapus6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus6ActionPerformed(evt);
+            }
+        });
+        roundednew15.add(Hapus6, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update6.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update6.setRadius(30);
+        Update6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update6ActionPerformed(evt);
+            }
+        });
+        roundednew15.add(Update6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew14.add(roundednew15, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        judul10.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
+        judul10.setForeground(new java.awt.Color(255, 255, 255));
+        judul10.setText("Daftar RFID");
+        roundednew14.add(judul10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, 31));
+
+        jButton5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jButton5.setText("AKTIFKAN RFID");
+        roundednew14.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 230, 60));
+
+        roundednew12.add(roundednew14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        add(roundednew12, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 469, 324));
+
+        roundednew16.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew16.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew16.setRoundedkananatas(92);
+        roundednew16.setRoundedkananbawah(92);
+        roundednew16.setRoundedkiriatas(92);
+        roundednew16.setRoundedkiribawah(92);
+        roundednew16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew17.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew17.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew17.setRoundedkananatas(92);
+        roundednew17.setRoundedkananbawah(92);
+        roundednew17.setRoundedkiriatas(92);
+        roundednew17.setRoundedkiribawah(92);
+        roundednew17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button9.setText("button2");
+        button9.setRadius(30);
+        button9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button9ActionPerformed(evt);
+            }
+        });
+        roundednew17.add(button9, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus7.setRadius(30);
+        Hapus7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus7ActionPerformed(evt);
+            }
+        });
+        roundednew17.add(Hapus7, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update7.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update7.setRadius(30);
+        Update7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update7ActionPerformed(evt);
+            }
+        });
+        roundednew17.add(Update7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew16.add(roundednew17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        roundednew18.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew18.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew18.setRoundedkananatas(92);
+        roundednew18.setRoundedkananbawah(92);
+        roundednew18.setRoundedkiriatas(92);
+        roundednew18.setRoundedkiribawah(92);
+        roundednew18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        roundednew19.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew19.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew19.setRoundedkananatas(92);
+        roundednew19.setRoundedkananbawah(92);
+        roundednew19.setRoundedkiriatas(92);
+        roundednew19.setRoundedkiribawah(92);
+        roundednew19.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        button10.setText("button2");
+        button10.setRadius(30);
+        button10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button10ActionPerformed(evt);
+            }
+        });
+        roundednew19.add(button10, new org.netbeans.lib.awtextra.AbsoluteConstraints(371, 39, 150, 225));
+
+        Hapus8.setRadius(30);
+        Hapus8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Hapus8ActionPerformed(evt);
+            }
+        });
+        roundednew19.add(Hapus8, new org.netbeans.lib.awtextra.AbsoluteConstraints(203, 39, 150, 225));
+
+        Update8.setFont(new java.awt.Font("Poppins", 1, 20)); // NOI18N
+        Update8.setRadius(30);
+        Update8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Update8ActionPerformed(evt);
+            }
+        });
+        roundednew19.add(Update8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 39, 150, 225));
+
+        roundednew18.add(roundednew19, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        judul12.setFont(new java.awt.Font("Poppins", 1, 30)); // NOI18N
+        judul12.setForeground(new java.awt.Color(255, 255, 255));
+        judul12.setText("Daftar RFID");
+        roundednew18.add(judul12, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, 31));
+
+        jButton7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jButton7.setText("AKTIFKAN RFID");
+        roundednew18.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 230, 60));
+
+        roundednew16.add(roundednew18, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 550, 300));
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+
+        tabelRegis.setForeground(new java.awt.Color(0, 0, 0));
+        tabelRegis.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "id user", "username", "makanan", "password", "role"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tabelRegis);
+
+        roundednew16.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, 278));
+
+        add(roundednew16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 360, 480, 320));
+
+        roundednew1.setColorend(new java.awt.Color(170, 215, 217));
+        roundednew1.setColorstar(new java.awt.Color(170, 215, 217));
+        roundednew1.setPreferredSize(new java.awt.Dimension(590, 740));
+        roundednew1.setRoundedkananatas(92);
+        roundednew1.setRoundedkananbawah(92);
+        roundednew1.setRoundedkiriatas(92);
+        roundednew1.setRoundedkiribawah(92);
+
+        btn_delete.setText("Hapus user");
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
+
+        btn_edit.setText("Edit user");
+        btn_edit.setMaximumSize(new java.awt.Dimension(102, 27));
+        btn_edit.setMinimumSize(new java.awt.Dimension(102, 27));
+        btn_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editActionPerformed(evt);
+            }
+        });
+
+        txt_user.setText("Tambah");
+        txt_user.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_userActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout roundednew1Layout = new javax.swing.GroupLayout(roundednew1);
+        roundednew1.setLayout(roundednew1Layout);
+        roundednew1Layout.setHorizontalGroup(
+            roundednew1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(roundednew1Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(txt_user, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 770, Short.MAX_VALUE)
+        roundednew1Layout.setVerticalGroup(
+            roundednew1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundednew1Layout.createSequentialGroup()
+                .addContainerGap(58, Short.MAX_VALUE)
+                .addGroup(roundednew1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(roundednew1Layout.createSequentialGroup()
+                        .addComponent(txt_user, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundednew1Layout.createSequentialGroup()
+                        .addGroup(roundednew1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(54, 54, 54))))
         );
+
+        add(roundednew1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 450, 320));
     }// </editor-fold>//GEN-END:initComponents
 
+    private void button5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button5ActionPerformed
 
+    private void Hapus3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus3ActionPerformed
+
+    private void Update3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update3ActionPerformed
+
+    private void button6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button6ActionPerformed
+
+    private void Hapus4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus4ActionPerformed
+
+    private void Update4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update4ActionPerformed
+
+    private void txt_makananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_makananActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_makananActionPerformed
+
+    private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_usernameActionPerformed
+
+    private void button7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button7ActionPerformed
+
+    private void Hapus5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus5ActionPerformed
+
+    private void Update5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update5ActionPerformed
+
+    private void button8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button8ActionPerformed
+
+    private void Hapus6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus6ActionPerformed
+
+    private void Update6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update6ActionPerformed
+
+    private void button9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button9ActionPerformed
+
+    private void Hapus7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus7ActionPerformed
+
+    private void Update7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update7ActionPerformed
+
+    private void button10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button10ActionPerformed
+
+    private void Hapus8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Hapus8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Hapus8ActionPerformed
+
+    private void Update8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Update8ActionPerformed
+
+    private void txt_passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_passwordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_passwordActionPerformed
+
+    private void btn_konfirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_konfirActionPerformed
+        switch(i){
+           case 0 :
+                 tambahUser();
+                break;
+           case 1 :
+                int selectedRow = tabelRegis.getSelectedRow();
+                    if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Pilih baris yang ingin di edit.");
+                    return;
+                    }else{
+                    UpdateUser(selectedRow);
+                
+                    }
+                    
+            break;
+            
+           case 2 :
+               selectedRow = tabelRegis.getSelectedRow();
+                    if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus.");
+                    return;
+                    }else{
+                        
+                HapusUser(selectedRow);
+                    }
+                
+        }
+    }//GEN-LAST:event_btn_konfirActionPerformed
+
+    private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
+        int b;
+         if (i == 1){
+            i=0;
+        }else{
+            i=1;
+        }
+         switch(i){
+            case 0 :
+            judul5.setText("Tambah User");
+            break;
+             case 1 :
+            judul5.setText("Edit User");
+            txt_user.setText("Tambah");
+            break;
+             case 2 :
+            judul5.setText("Hapus User");
+            
+
+            break;
+         }
+    }//GEN-LAST:event_btn_editActionPerformed
+
+    private void txt_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_userActionPerformed
+        int b;
+         if (i == 1){
+            i = 0;
+        }else{
+            i = 1;
+        }
+         switch(i){
+            case 0 :
+            judul5.setText("Tambah User");
+            break;
+             case 1 :
+            judul5.setText("Tambah User");
+//            ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("Gambar\\Edit_Produk.png"));
+//            txt_user.setIcon(icon);
+            txt_user.setText("Tambah");
+            
+            break;
+             case 2 :
+            judul5.setText("Hapus User");
+            
+
+            break;
+         }
+    }//GEN-LAST:event_txt_userActionPerformed
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        int b = 0;
+        if (b == 2){
+            b = 0;
+            i=0;
+        }else{
+            b = 2;
+            i = 2;
+        }
+
+        switch(b){
+            case 0 :
+            judul5.setText("Tambah User");
+            break;
+            case 1 :
+            judul5.setText("Edit User");
+            break;
+            case 2 :
+            judul5.setText("Hapus User");
+            
+            break;
+        }
+    }//GEN-LAST:event_btn_deleteActionPerformed
+    private void Masukindata(DefaultTableModel tabel){
+     tabel.setRowCount(0);
+        
+    try {
+        String sql = "SELECT * FROM user";
+        PreparedStatement PS = conn.prepareStatement(sql);
+        ResultSet RS = PS.executeQuery();
+        while(RS.next()){
+        String Id_User = RS.getString("Id_user");
+        String Username = RS.getString("Username");
+        String Makanan = RS.getString("Makanan_favorite");
+        String Password = RS.getString("Password");
+        String role = RS.getString("Role");
+        
+        Object [] row = {Id_User, Username,Makanan,Password,role};
+        tabel.addRow(row);
+}
+
+    }catch (Exception e){
+    }
+        
+    }
+public void loadData(){
+    Masukindata((DefaultTableModel) tabelRegis.getModel());
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Aset.button Hapus3;
+    private Aset.button Hapus4;
+    private Aset.button Hapus5;
+    private Aset.button Hapus6;
+    private Aset.button Hapus7;
+    private Aset.button Hapus8;
+    private Aset.button Update3;
+    private Aset.button Update4;
+    private Aset.button Update5;
+    private Aset.button Update6;
+    private Aset.button Update7;
+    private Aset.button Update8;
+    private javax.swing.JButton btn_RFID;
+    private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_edit;
+    private javax.swing.JButton btn_konfir;
+    private Aset.button button10;
+    private Aset.button button5;
+    private Aset.button button6;
+    private Aset.button button7;
+    private Aset.button button8;
+    private Aset.button button9;
+    private javax.swing.JComboBox<String> cbRole;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JScrollBar jScrollBar1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel judul10;
+    private javax.swing.JLabel judul11;
+    private javax.swing.JLabel judul12;
+    private javax.swing.JLabel judul3;
+    private javax.swing.JLabel judul4;
+    private javax.swing.JLabel judul5;
+    private javax.swing.JLabel judul7;
+    private javax.swing.JLabel judul8;
+    private javax.swing.JLabel judul9;
+    private Aset.roundednew roundednew1;
+    private Aset.roundednew roundednew10;
+    private Aset.roundednew roundednew11;
+    private Aset.roundednew roundednew12;
+    private Aset.roundednew roundednew13;
+    private Aset.roundednew roundednew14;
+    private Aset.roundednew roundednew15;
+    private Aset.roundednew roundednew16;
+    private Aset.roundednew roundednew17;
+    private Aset.roundednew roundednew18;
+    private Aset.roundednew roundednew19;
+    private Aset.roundednew roundednew8;
+    private Aset.roundednew roundednew9;
+    private javax.swing.JTable tabelRegis;
+    private javax.swing.JTextField txt_makanan;
+    private javax.swing.JTextField txt_password;
+    private javax.swing.JButton txt_user;
+    private javax.swing.JTextField txt_username;
     // End of variables declaration//GEN-END:variables
 }
